@@ -54,7 +54,13 @@ export function captureError(config: Config) {
           line: event.lineno,
           column: event.colno,
         }
-        config.reportError(msgObj)
+
+        // 只上报资源类型的错误
+        const target = event.target || event.srcElement
+        const isHTMLElement = target && target instanceof HTMLElement
+        if (isHTMLElement) {
+          config.reportError(msgObj)
+        }
       } catch (err) {
 
       }
@@ -62,6 +68,8 @@ export function captureError(config: Config) {
       // 但如果是加载资源异常无法阻止
       // event.preventDefault()
     },
+    // 当一项资源（如<img>或<script>）加载失败，该 error 不会冒泡到 window，可在捕获阶段捕获
+    // true 代表在捕获阶段调用，false 代表在冒泡阶段
     true
   )
 

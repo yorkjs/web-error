@@ -1,5 +1,5 @@
 /**
- * web-error.js v1.0.0
+ * web-error.js v1.0.1
  * (c) 2021-2022 shushu2013
  * Released under the MIT License.
  */
@@ -52,14 +52,22 @@
                   line: event.lineno,
                   column: event.colno,
               };
-              config.reportError(msgObj);
+              // 只上报资源类型的错误
+              var target = event.target || event.srcElement;
+              var isHTMLElement = target && target instanceof HTMLElement;
+              if (isHTMLElement) {
+                  config.reportError(msgObj);
+              }
           }
           catch (err) {
           }
           // 用 preventDefault() 方法可以阻止异常信息出现在控制台
           // 但如果是加载资源异常无法阻止
           // event.preventDefault()
-      }, true);
+      }, 
+      // 当一项资源（如<img>或<script>）加载失败，该 error 不会冒泡到 window，可在捕获阶段捕获
+      // true 代表在捕获阶段调用，false 代表在冒泡阶段
+      true);
       // 当 Promise 被 reject 且没有 reject 处理器的时候
       // 会触发 unhandledrejection 事件
       // window.addEventListener('unhandledrejection', function (event: PromiseRejectionEvent) {
@@ -96,7 +104,7 @@
   /**
    * 版本
    */
-  var version = "1.0.0";
+  var version = "1.0.1";
 
   exports.init = init;
   exports.sendBeacon = sendBeacon;
