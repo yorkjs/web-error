@@ -1,5 +1,5 @@
 /**
- * web-error.js v1.0.1
+ * web-error.js v1.0.2
  * (c) 2021-2022 shushu2013
  * Released under the MIT License.
  */
@@ -44,18 +44,19 @@
       };
       window.addEventListener('error', function (event) {
           try {
-              var msgObj = {
-                  url: location.href,
-                  type: WINDOW_ERROR,
-                  error: event.message,
-                  file: event.filename,
-                  line: event.lineno,
-                  column: event.colno,
-              };
               // 只上报资源类型的错误
               var target = event.target || event.srcElement;
               var isHTMLElement = target && target instanceof HTMLElement;
               if (isHTMLElement) {
+                  var targetURL = target.href;
+                  var msgObj = {
+                      url: location.href,
+                      type: WINDOW_ERROR,
+                      error: event.message || targetURL,
+                      file: event.filename || targetURL,
+                      line: event.lineno,
+                      column: event.colno,
+                  };
                   config.reportError(msgObj);
               }
           }
@@ -104,7 +105,7 @@
   /**
    * 版本
    */
-  var version = "1.0.1";
+  var version = "1.0.2";
 
   exports.init = init;
   exports.sendBeacon = sendBeacon;

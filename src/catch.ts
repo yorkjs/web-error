@@ -46,19 +46,20 @@ export function captureError(config: Config) {
     'error',
     function (event: ErrorEvent) {
       try {
-        const msgObj: ErrorMsg = {
-          url: location.href,
-          type: WINDOW_ERROR,
-          error: event.message,
-          file: event.filename,
-          line: event.lineno,
-          column: event.colno,
-        }
-
         // 只上报资源类型的错误
         const target = event.target || event.srcElement
         const isHTMLElement = target && target instanceof HTMLElement
         if (isHTMLElement) {
+          const targetURL = (target as any).href
+          const msgObj: ErrorMsg = {
+            url: location.href,
+            type: WINDOW_ERROR,
+            error: event.message || targetURL,
+            file: event.filename || targetURL,
+            line: event.lineno,
+            column: event.colno,
+          }
+
           config.reportError(msgObj)
         }
       } catch (err) {

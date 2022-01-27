@@ -1,5 +1,5 @@
 /**
- * web-error.js v1.0.1
+ * web-error.js v1.0.2
  * (c) 2021-2022 shushu2013
  * Released under the MIT License.
  */
@@ -38,18 +38,19 @@ function captureError(config) {
     };
     window.addEventListener('error', function (event) {
         try {
-            const msgObj = {
-                url: location.href,
-                type: WINDOW_ERROR,
-                error: event.message,
-                file: event.filename,
-                line: event.lineno,
-                column: event.colno,
-            };
             // 只上报资源类型的错误
             const target = event.target || event.srcElement;
             const isHTMLElement = target && target instanceof HTMLElement;
             if (isHTMLElement) {
+                const targetURL = target.href;
+                const msgObj = {
+                    url: location.href,
+                    type: WINDOW_ERROR,
+                    error: event.message || targetURL,
+                    file: event.filename || targetURL,
+                    line: event.lineno,
+                    column: event.colno,
+                };
                 config.reportError(msgObj);
             }
         }
@@ -98,7 +99,7 @@ function init(config) {
 /**
  * 版本
  */
-const version = "1.0.1";
+const version = "1.0.2";
 
 export { init, sendBeacon, sendImage, version };
 //# sourceMappingURL=web-error.esm.js.map
