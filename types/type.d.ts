@@ -1,3 +1,8 @@
+declare global {
+    interface Window {
+        attachEvent: any;
+    }
+}
 export interface ErrorMsg {
     url: string;
     type: number | string;
