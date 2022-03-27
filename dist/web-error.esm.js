@@ -1,5 +1,5 @@
 /**
- * web-error.js v1.0.3
+ * web-error.js v1.0.4
  * (c) 2021-2022 shushu2013
  * Released under the MIT License.
  */
@@ -13,7 +13,7 @@ function catchListenerError(event, config) {
         const target = event.target || event.srcElement;
         const isHTMLElement = target && target instanceof HTMLElement;
         if (isHTMLElement) {
-            const targetURL = target.href;
+            const targetURL = target.href || target.src;
             const msgObj = {
                 url: location.href,
                 type: WINDOW_ERROR,
@@ -56,6 +56,10 @@ function captureError(config) {
                 line: lineno,
                 column: colno,
             };
+            // 忽略 Script error. 错误
+            if (config.ignoreScriptError && msgObj.error === 'Script error.') {
+                return false;
+            }
             config.reportError(msgObj);
         }
         catch (err) {
@@ -94,7 +98,7 @@ function init(config) {
 /**
  * 版本
  */
-const version = "1.0.3";
+const version = "1.0.4";
 
 export { init, sendBeacon, sendImage, version };
 //# sourceMappingURL=web-error.esm.js.map

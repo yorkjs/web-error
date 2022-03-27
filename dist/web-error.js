@@ -1,5 +1,5 @@
 /**
- * web-error.js v1.0.3
+ * web-error.js v1.0.4
  * (c) 2021-2022 shushu2013
  * Released under the MIT License.
  */
@@ -19,7 +19,7 @@
           var target = event.target || event.srcElement;
           var isHTMLElement = target && target instanceof HTMLElement;
           if (isHTMLElement) {
-              var targetURL = target.href;
+              var targetURL = target.href || target.src;
               var msgObj = {
                   url: location.href,
                   type: WINDOW_ERROR,
@@ -62,6 +62,10 @@
                   line: lineno,
                   column: colno,
               };
+              // 忽略 Script error. 错误
+              if (config.ignoreScriptError && msgObj.error === 'Script error.') {
+                  return false;
+              }
               config.reportError(msgObj);
           }
           catch (err) {
@@ -100,7 +104,7 @@
   /**
    * 版本
    */
-  var version = "1.0.3";
+  var version = "1.0.4";
 
   exports.init = init;
   exports.sendBeacon = sendBeacon;

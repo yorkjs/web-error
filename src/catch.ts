@@ -8,7 +8,7 @@ function catchListenerError(event: ErrorEvent, config: Config) {
     const target = event.target || event.srcElement
     const isHTMLElement = target && target instanceof HTMLElement
     if (isHTMLElement) {
-      const targetURL = (target as any).href
+      const targetURL = (target as any).href || (target as any).src
       const msgObj: ErrorMsg = {
         url: location.href,
         type: WINDOW_ERROR,
@@ -63,6 +63,12 @@ export function captureError(config: Config) {
         line: lineno,
         column: colno,
       }
+
+      // 忽略 Script error. 错误
+      if (config.ignoreScriptError && msgObj.error === 'Script error.') {
+        return false
+      }
+
       config.reportError(msgObj)
     } catch (err) {
 
