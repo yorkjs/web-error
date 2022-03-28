@@ -64,8 +64,8 @@ export function captureError(config: Config) {
         column: colno,
       }
 
-      // 忽略 Script error. 错误
-      if (config.ignoreScriptError && msgObj.error === 'Script error.') {
+      // 忽略跨域脚本错误 [Script error.]
+      if (config.ignoreCrossScriptError && msgObj.error === 'Script error.') {
         return false
       }
 

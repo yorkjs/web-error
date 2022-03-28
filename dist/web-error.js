@@ -1,5 +1,5 @@
 /**
- * web-error.js v1.0.4
+ * web-error.js v1.0.5
  * (c) 2021-2022 shushu2013
  * Released under the MIT License.
  */
@@ -62,8 +62,8 @@
                   line: lineno,
                   column: colno,
               };
-              // 忽略 Script error. 错误
-              if (config.ignoreScriptError && msgObj.error === 'Script error.') {
+              // 忽略跨域脚本错误 [Script error.]
+              if (config.ignoreCrossScriptError && msgObj.error === 'Script error.') {
                   return false;
               }
               config.reportError(msgObj);
@@ -104,7 +104,7 @@
   /**
    * 版本
    */
-  var version = "1.0.4";
+  var version = "1.0.5";
 
   exports.init = init;
   exports.sendBeacon = sendBeacon;

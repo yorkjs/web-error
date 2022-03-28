@@ -12,6 +12,6 @@ export interface ErrorMsg {
     column?: number;
 }
 export interface Config {
-    ignoreScriptError?: boolean;
+    ignoreCrossScriptError?: boolean;
     reportError: (err: ErrorMsg) => void;
 }

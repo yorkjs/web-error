@@ -14,6 +14,6 @@ export interface ErrorMsg {
 }
 
 export interface Config {
-  ignoreScriptError?: boolean,
+  ignoreCrossScriptError?: boolean,
   reportError: (err: ErrorMsg) => void,
 }

@@ -1,6 +1,6 @@
 {
   "name": "@yorkjs/web-error",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "process web-error and report tool",
   "main": "dist/web-error.js",
   "module": "dist/web-error.esm.js",
