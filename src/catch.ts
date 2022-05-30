@@ -1,6 +1,13 @@
-import { Config, ErrorMsg } from './type'
-import { WINDOW_ERROR, WINDOW_ONERROR } from './constant'
+import {
+  Config,
+  ErrorMsg
+} from './type'
 
+import {
+  WINDOW_ERROR,
+  WINDOW_ONERROR,
+  UNHANDLED_REJECTION
+} from './constant'
 
 function catchListenerError(event: ErrorEvent, config: Config) {
   try {
@@ -86,9 +93,26 @@ export function captureError(config: Config) {
       // true 代表在捕获阶段调用，false 代表在冒泡阶段
       true
     )
+
+    // 捕获 promsie 错误
+    window.addEventListener('unhandledrejection', function (event) {
+      try {
+        const msgObj: ErrorMsg = {
+          url: location.href,
+          type: UNHANDLED_REJECTION,
+          error: JSON.stringify(event.reason),
+          file: location.href,
+        }
+
+        config.reportError(msgObj)
+      } catch (err) {
+
+      }
+    })
   }
   // 兼容 IE 8
   else if (window.attachEvent) {
     window.attachEvent('onerror', handleError)
   }
+
 }

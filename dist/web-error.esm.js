@@ -1,11 +1,12 @@
 /**
- * web-error.js v1.0.5
+ * web-error.js v1.0.6
  * (c) 2021-2022 shushu2013
  * Released under the MIT License.
  */
 
 const WINDOW_ONERROR = 1;
 const WINDOW_ERROR = 2;
+const UNHANDLED_REJECTION = 3;
 
 function catchListenerError(event, config) {
     try {
@@ -72,6 +73,20 @@ function captureError(config) {
         // 当一项资源（如<img>或<script>）加载失败，该 error 不会冒泡到 window，可在捕获阶段捕获
         // true 代表在捕获阶段调用，false 代表在冒泡阶段
         true);
+        // 捕获 promsie 错误
+        window.addEventListener('unhandledrejection', function (event) {
+            try {
+                const msgObj = {
+                    url: location.href,
+                    type: UNHANDLED_REJECTION,
+                    error: JSON.stringify(event.reason),
+                    file: location.href,
+                };
+                config.reportError(msgObj);
+            }
+            catch (err) {
+            }
+        });
     }
     // 兼容 IE 8
     else if (window.attachEvent) {
@@ -98,7 +113,7 @@ function init(config) {
 /**
  * 版本
  */
-const version = "1.0.5";
+const version = "1.0.6";
 
 export { init, sendBeacon, sendImage, version };
 //# sourceMappingURL=web-error.esm.js.map
